@@ -8,15 +8,14 @@ const app = express();
 // Middleware - IMPORTANT: Order matters!
 app.use(cors({
   origin: [
-    'https://flat-expense-tracker-hdcaxfalq-sawan-pandeys-projects.vercel.app',
+    'https://flat-expense-tracker-2g5r.vercel.app',
     'http://localhost:5173',
-    'http://localhost:3000',
-    'http://127.0.0.1:5500',
-    /\.vercel\.app$/  // Allow all Vercel preview URLs
+    'http://127.0.0.1:5500'
   ],
   credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'admin-password', 'Authorization']
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
+  allowedHeaders: ['Content-Type', 'admin-password', 'Authorization'],
+  exposedHeaders: ['Content-Length', 'Content-Type']
 }));
 app.use(express.json());
 
