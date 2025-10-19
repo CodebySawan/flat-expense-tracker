@@ -1,5 +1,5 @@
 // API Base URL
-const API_URL = 'https://flat-expense-tracker-hdcaxfalq-sawan-pandeys-projects.vercel.app/api';
+const API_URL = 'https://flat-expense-tracker-red.vercel.app/';
 
 // Global variables
 let flatmates = [];
