@@ -5,18 +5,20 @@ require('dotenv').config();
 
 const app = express();
 
-// Middleware - IMPORTANT: Order matters!
-app.use(cors({
-  origin: [
-    'https://flat-expense-tracker-2g5r.vercel.app',
-    'http://localhost:5173',
-    'http://127.0.0.1:5500'
-  ],
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
-  allowedHeaders: ['Content-Type', 'admin-password', 'Authorization'],
-  exposedHeaders: ['Content-Length', 'Content-Type']
-}));
+// Middleware - Simple CORS that works everywhere
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, admin-password, Authorization');
+  res.header('Access-Control-Allow-Credentials', 'true');
+  
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(200);
+  }
+  next();
+});
+
+app.use(cors());
 app.use(express.json());
 
 // Database Connection
