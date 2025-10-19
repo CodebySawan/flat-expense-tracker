@@ -1,5 +1,5 @@
 // API Base URL
-const API_URL = 'http://localhost:5000/api';
+const API_URL = 'https://flat-expense-tracker-hdcaxfalq-sawan-pandeys-projects.vercel.app/api';
 
 // Global variables
 let flatmates = [];
