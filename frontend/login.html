@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - Flat Expense Tracker</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .login-container {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+    
+    .login-box {
+      background: white;
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      width: 90%;
+      max-width: 400px;
+    }
+    
+    .login-box h1 {
+      color: #333;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+    
+    .login-box p {
+      color: #6b7280;
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    
+    .form-group-login {
+      margin-bottom: 20px;
+    }
+    
+    .form-group-login label {
+      display: block;
+      margin-bottom: 8px;
+      color: #333;
+      font-weight: 600;
+    }
+    
+    .form-group-login input {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #e5e7eb;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+    
+    .form-group-login input:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+    
+    .login-btn {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.3s;
+    }
+    
+    .login-btn:hover {
+      transform: translateY(-2px);
+    }
+    
+    .login-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+    
+    .error-message {
+      background: #fee;
+      color: #c00;
+      padding: 12px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      display: none;
+    }
+    
+    .error-message.show {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  
+  <div class="login-container">
+    <div class="login-box">
+      <h1>🏠 Flat Expense Tracker</h1>
+      <p>Enter password to access</p>
+      
+      <div class="error-message" id="errorMessage">
+        Incorrect password. Please try again.
+      </div>
+      
+      <form id="loginForm">
+        <div class="form-group-login">
+          <label for="password">Password:</label>
+          <input 
+            type="password" 
+            id="password" 
+            placeholder="Enter flat password" 
+            required
+            autocomplete="off"
+          >
+        </div>
+        
+        <button type="submit" class="login-btn" id="loginBtn">
+          Login
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+  // Auto-detect API URL
+  const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+    ? 'http://localhost:5000/api'
+    : 'https://flat-expense-tracker-red.vercel.app/api';
+
+  const loginForm = document.getElementById('loginForm');
+  const passwordInput = document.getElementById('password');
+  const errorMessage = document.getElementById('errorMessage');
+  const loginBtn = document.getElementById('loginBtn');
+
+  loginForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const password = passwordInput.value;
+    
+    // Disable button
+    loginBtn.disabled = true;
+    loginBtn.textContent = 'Checking...';
+    errorMessage.classList.remove('show');
+    
+    try {
+      // Verify password with backend
+      const response = await fetch(`${API_URL}/auth/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ password })
+      });
+      
+      const data = await response.json();
+      
+      if (response.ok) {
+        // Store login status in browser
+        localStorage.setItem('flatLoginToken', btoa(password + ':' + Date.now()));
+        localStorage.setItem('flatLoginTime', Date.now());
+        
+        // Redirect to main app
+        window.location.href = 'index.html';
+      } else {
+        // Show error
+        errorMessage.classList.add('show');
+        loginBtn.disabled = false;
+        loginBtn.textContent = 'Login';
+        passwordInput.value = '';
+        passwordInput.focus();
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      errorMessage.textContent = 'Connection error. Please try again.';
+      errorMessage.classList.add('show');
+      loginBtn.disabled = false;
+      loginBtn.textContent = 'Login';
+    }
+  });
+</script>
+
+</body>
+</html>

@@ -804,3 +804,12 @@ async function deleteSettlement(settlementId) {
     alert('Failed to delete settlement');
   }
 }
+
+// Logout button
+document.getElementById('logoutBtn').addEventListener('click', () => {
+  if (confirm('Are you sure you want to logout?')) {
+    localStorage.removeItem('flatLoginToken');
+    localStorage.removeItem('flatLoginTime');
+    window.location.href = 'login.html';
+  }
+});

@@ -7,7 +7,19 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  
+  <script>
+    // Check if user is logged in
+    const loginToken = localStorage.getItem('flatLoginToken');
+    const loginTime = localStorage.getItem('flatLoginTime');
+    const now = Date.now();
+    const sevenDays = 7 * 24 * 60 * 60 * 1000;
+    
+    // If not logged in OR login expired (7 days), redirect to login
+    if (!loginToken || !loginTime || (now - loginTime) > sevenDays) {
+      window.location.href = 'login.html';
+    }
+  </script>
+
   <!-- Header -->
   <header>
     <div class="container">
@@ -17,9 +29,10 @@
           <p>Kartik • Akshay • Prince • Sawan • Krishna</p>
         </div>
         <div class="header-actions">
-          <button class="btn-refresh" id="refreshBtn" title="Refresh data">🔄</button>
-          <button class="btn-admin" id="adminBtn">🔐 Admin</button>
-          <span class="admin-indicator" id="adminIndicator" style="display:none;">Admin Mode</span>
+            <button class="btn-refresh" id="refreshBtn" title="Refresh data">🔄</button>
+            <button class="btn-admin" id="adminBtn">🔐 Admin</button>
+            <span class="admin-indicator" id="adminIndicator" style="display:none;">Admin Mode</span>
+            <button class="btn-admin" id="logoutBtn" style="background: rgba(239, 68, 68, 0.3);">🚪 Logout</button>
         </div>
       </div>
     </div>
