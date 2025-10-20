@@ -1,7 +1,7 @@
 // Automatically use local or production backend
 const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-  ? 'http://localhost:5000/api'  // Local development
-  : 'https://flat-expense-tracker-red.vercel.app/api';  // Production
+  ? 'http://localhost:5000/api'
+  : 'https://flat-expense-tracker-eight.vercel.app/api';
 
 // Global variables
 let flatmates = [];
