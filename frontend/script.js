@@ -235,6 +235,14 @@ function closeVegExpenseModal() {
   document.getElementById('vegExpenseForm').reset();
 }
 
+// Helper function to reset submit button
+function resetSubmitButton(button, originalText) {
+  button.disabled = false;
+  button.textContent = originalText;
+  button.style.opacity = '1';
+  button.style.cursor = 'pointer';
+}
+
 async function handleVegExpenseSubmit(e) {
   e.preventDefault();
   
@@ -260,11 +268,7 @@ async function handleVegExpenseSubmit(e) {
   
   if (sharedBy.length === 0) {
     alert('Please select at least one person who shared this expense');
-    // Re-enable button
-    submitBtn.disabled = false;
-    submitBtn.textContent = originalText;
-    submitBtn.style.opacity = '1';
-    submitBtn.style.cursor = 'pointer';
+    resetSubmitButton(submitBtn, originalText);
     return;
   }
   
@@ -291,8 +295,11 @@ async function handleVegExpenseSubmit(e) {
     // Move to next turn
     await nextVegetableTurn();
     
-    closeVegExpenseModal();
     alert('✅ Expense added and turn moved!');
+    
+    // Reset button and close modal
+    resetSubmitButton(submitBtn, originalText);
+    closeVegExpenseModal();
     
     // Reload data
     await loadCurrentExpenses();
@@ -305,12 +312,7 @@ async function handleVegExpenseSubmit(e) {
   } catch (error) {
     console.error('Error adding expense:', error);
     alert('Failed to add expense');
-    
-    // Re-enable button on error
-    submitBtn.disabled = false;
-    submitBtn.textContent = originalText;
-    submitBtn.style.opacity = '1';
-    submitBtn.style.cursor = 'pointer';
+    resetSubmitButton(submitBtn, originalText);
   }
 }
 
@@ -387,11 +389,7 @@ async function handleCustomExpenseSubmit(e) {
   
   if (sharedBy.length === 0) {
     alert('Please select at least one person who shared this expense');
-    // Re-enable button
-    submitBtn.disabled = false;
-    submitBtn.textContent = originalText;
-    submitBtn.style.opacity = '1';
-    submitBtn.style.cursor = 'pointer';
+    resetSubmitButton(submitBtn, originalText);
     return;
   }
   
@@ -415,8 +413,11 @@ async function handleCustomExpenseSubmit(e) {
     const data = await response.json();
     console.log('Custom expense added:', data);
     
-    closeCustomExpenseModal();
     alert('✅ Custom expense added!');
+    
+    // Reset button and close modal
+    resetSubmitButton(submitBtn, originalText);
+    closeCustomExpenseModal();
     
     // Reload data
     await loadCurrentExpenses();
@@ -429,12 +430,7 @@ async function handleCustomExpenseSubmit(e) {
   } catch (error) {
     console.error('Error adding custom expense:', error);
     alert('Failed to add custom expense');
-    
-    // Re-enable button on error
-    submitBtn.disabled = false;
-    submitBtn.textContent = originalText;
-    submitBtn.style.opacity = '1';
-    submitBtn.style.cursor = 'pointer';
+    resetSubmitButton(submitBtn, originalText);
   }
 }
 // ============ CURRENT EXPENSES ============
