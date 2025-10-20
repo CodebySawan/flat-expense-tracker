@@ -1,8 +1,5 @@
 // API Base URL
-// Automatically use local or production backend
-const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-  ? 'http://localhost:5000/api'  // Local development
-  : 'https://flat-expense-tracker-red.vercel.app/api';  // Production
+const API_URL = 'https://flat-expense-tracker-red.vercel.app/api';
 
 // Global variables
 let flatmates = [];
@@ -172,6 +169,14 @@ function updateTurnDisplay() {
 }
 
 async function fillWaterCan() {
+  const btn = document.getElementById('fillWaterBtn');
+  const originalText = btn.textContent;
+  
+  // Disable button
+  btn.disabled = true;
+  btn.textContent = 'Filling...';
+  btn.style.opacity = '0.6';
+  
   try {
     const response = await fetch(`${API_URL}/turns/water/fill`, {
       method: 'POST'
@@ -196,6 +201,11 @@ async function fillWaterCan() {
   } catch (error) {
     console.error('Error filling water can:', error);
     alert('Failed to fill water can');
+  } finally {
+    // Re-enable button
+    btn.disabled = false;
+    btn.textContent = originalText;
+    btn.style.opacity = '1';
   }
 }
 
@@ -226,6 +236,14 @@ function closeVegExpenseModal() {
 async function handleVegExpenseSubmit(e) {
   e.preventDefault();
   
+  // Disable submit button
+  const submitBtn = e.target.querySelector('button[type="submit"]');
+  const originalText = submitBtn.textContent;
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Adding...';
+  submitBtn.style.opacity = '0.6';
+  submitBtn.style.cursor = 'not-allowed';
+  
   const amount = document.getElementById('vegAmount').value;
   const description = document.getElementById('vegDescription').value;
   
@@ -240,6 +258,11 @@ async function handleVegExpenseSubmit(e) {
   
   if (sharedBy.length === 0) {
     alert('Please select at least one person who shared this expense');
+    // Re-enable button
+    submitBtn.disabled = false;
+    submitBtn.textContent = originalText;
+    submitBtn.style.opacity = '1';
+    submitBtn.style.cursor = 'pointer';
     return;
   }
   
@@ -280,6 +303,12 @@ async function handleVegExpenseSubmit(e) {
   } catch (error) {
     console.error('Error adding expense:', error);
     alert('Failed to add expense');
+    
+    // Re-enable button on error
+    submitBtn.disabled = false;
+    submitBtn.textContent = originalText;
+    submitBtn.style.opacity = '1';
+    submitBtn.style.cursor = 'pointer';
   }
 }
 
@@ -333,6 +362,14 @@ function closeCustomExpenseModal() {
 async function handleCustomExpenseSubmit(e) {
   e.preventDefault();
   
+  // Disable submit button
+  const submitBtn = e.target.querySelector('button[type="submit"]');
+  const originalText = submitBtn.textContent;
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Adding...';
+  submitBtn.style.opacity = '0.6';
+  submitBtn.style.cursor = 'not-allowed';
+  
   const paidBy = document.getElementById('customPaidBy').value;
   const amount = document.getElementById('customAmount').value;
   const description = document.getElementById('customDescription').value;
@@ -348,6 +385,11 @@ async function handleCustomExpenseSubmit(e) {
   
   if (sharedBy.length === 0) {
     alert('Please select at least one person who shared this expense');
+    // Re-enable button
+    submitBtn.disabled = false;
+    submitBtn.textContent = originalText;
+    submitBtn.style.opacity = '1';
+    submitBtn.style.cursor = 'pointer';
     return;
   }
   
@@ -385,9 +427,14 @@ async function handleCustomExpenseSubmit(e) {
   } catch (error) {
     console.error('Error adding custom expense:', error);
     alert('Failed to add custom expense');
+    
+    // Re-enable button on error
+    submitBtn.disabled = false;
+    submitBtn.textContent = originalText;
+    submitBtn.style.opacity = '1';
+    submitBtn.style.cursor = 'pointer';
   }
 }
-
 // ============ CURRENT EXPENSES ============
 
 async function loadCurrentExpenses() {
